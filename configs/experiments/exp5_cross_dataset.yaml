@@ -1,0 +1,4 @@
+# Experiment 5: train on GTSRB, test on signs from other countries (shared classes), clean and corrupted.
+_base_: common.yaml
+datasets: [btsd, ctsd]         # a dataset that is missing, or whose class map is unverified, is skipped
+runs: [smallcnn_base, resnet18_base, deit_s_base, resnet18_full, deit_s_full, ensemble_conf, fusion_full]

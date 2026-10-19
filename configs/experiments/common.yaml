@@ -1,0 +1,23 @@
+# Shared by all experiment configs.
+_base_: ../base.yaml
+seeds: [0, 1, 2]
+normalizer: smallcnn_base      # mCE and relative mCE are normalised by this run's errors (mean over seeds)
+labels:
+  smallcnn_base: SmallCNN
+  resnet18_base: ResNet-18
+  deit_s_base: DeiT-S
+  resnet18_mix: ResNet-18 + mixing
+  resnet18_mix_jsd: ResNet-18 + mixing + JSD
+  resnet18_full: ResNet-18 (proposed training)
+  deit_s_full: DeiT-S (proposed training)
+  ensemble_avg: Average ensemble
+  ensemble_conf: Confidence-weighted ensemble
+  fusion_full: Gated fusion (proposed)
+  resnet18_jsd_prime: PRIME ops only
+  resnet18_jsd_nogeom: AugMix + PRIME, no geometric ops
+  resnet18_in: ResNet-18 + instance input norm
+  deit_s_in: DeiT-S + instance input norm
+  ensemble_avg_in: Average ensemble (instance norm)
+  ensemble_views: Average over view experts
+  ensemble_views_in: Average over view experts (instance norm)
+  fusion_v2: Stacked view-expert gate (v2)

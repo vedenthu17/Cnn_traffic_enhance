@@ -1,0 +1,3 @@
+# Experiment 2: accuracy and macro-F1 on every corruption x severity of GTSRB-C.
+_base_: common.yaml
+runs: [smallcnn_base, resnet18_base, deit_s_base, resnet18_full, deit_s_full, ensemble_avg, ensemble_conf, fusion_full]

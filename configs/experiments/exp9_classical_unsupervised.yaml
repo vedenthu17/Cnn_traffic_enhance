@@ -1,0 +1,21 @@
+# Experiment 9: other learning algorithms on the same test sets.
+#   A. classical supervised learners on hand-crafted HOG features, and classifiers on the
+#      self-supervised (label-free) SimCLR representation;
+#   B. an unsupervised analysis: k-means clusters of each network's features, and how often a
+#      corrupted image stays in the cluster of its clean original (no labels involved).
+_base_: common.yaml
+classical:
+  hog: {win: 64, block: 16, stride: 8, cell: 8, bins: 9}     # 1,764 features per image
+  svm_c: 0.05                 # LinearSVC regularisation (standardised HOG)
+  rf_trees: 200
+  knn_k: 5
+  pca_dim: 64
+  logreg_c: 1.0
+ssl_run: resnet18_simclr
+knn_bank: 0                   # 0 = the whole training set as the kNN memory bank
+cluster:
+  runs: [resnet18_base, resnet18_full, resnet18_in, resnet18_v3, resnet18_v3_ssl, resnet18_simclr, deit_s_full,
+         convnext_atto_v3, student_v3]
+  k: 43
+  n_init: 3
+  severities: [3, 5]

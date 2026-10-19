@@ -1,0 +1,18 @@
+# Figures. All of them are written as vector PDF to results/figures/.
+_base_: common.yaml
+baseline: resnet18_base
+proposed: fusion_full
+curve_runs: [smallcnn_base, resnet18_base, deit_s_base, resnet18_full, deit_s_full, fusion_full]
+reliability_runs: [smallcnn_base, resnet18_base, deit_s_base, fusion_full]
+fourier:
+  runs: [resnet18_base, deit_s_base, fusion_full]
+  seed: 0                      # model seed
+  n_images: 500                # test images per Fourier basis
+  eps: 4.0                     # L2 norm of the perturbation per channel (pixel range [0, 1])
+  stride: 1                    # evaluate every `stride`-th frequency in each direction
+gradcam:
+  runs: [resnet18_base, fusion_full]
+  seed: 0
+  n_samples: 6
+  corruptions: [gaussian_noise, fog, motion_blur]
+  severity: 3

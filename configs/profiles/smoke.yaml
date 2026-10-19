@@ -1,0 +1,15 @@
+# --profile smoke: a tiny end-to-end run of every script (minutes). Numbers are meaningless.
+# Outputs go to runs_smoke/ and results_smoke/.
+# Needs: python scripts/make_gtsrb_c.py --profile smoke   (and --dataset btsd --profile smoke)
+data:
+  train_subset: 3000
+  val_subset: 400
+  test_subset: 200
+train:
+  epochs: 2
+  batch_size: 64             # small enough for a 4 GB GPU
+seeds: [0, 1]
+n_per_set: 64                # experiment 6
+n_per_set_bs1: 16
+fourier: {n_images: 32, stride: 8}
+gradcam: {n_samples: 3}

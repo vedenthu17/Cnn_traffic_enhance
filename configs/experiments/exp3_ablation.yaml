@@ -1,0 +1,9 @@
+# Experiment 3: cumulative ablation. Each step adds one component to the previous one.
+_base_: common.yaml
+steps:
+  - {label: "ResNet-18 baseline", run: resnet18_base}
+  - {label: "+ AugMix mixing", run: resnet18_mix}
+  - {label: "+ JSD consistency", run: resnet18_mix_jsd}
+  - {label: "+ Fourier / PRIME ops", run: resnet18_full}
+  - {label: "+ gated fusion with DeiT-S", run: fusion_full}
+  - {label: "+ TENT", run: fusion_full, tta: {method: tent, batch_size: 64, lr: 1.0e-3}}

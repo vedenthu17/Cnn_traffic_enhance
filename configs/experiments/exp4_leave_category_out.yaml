@@ -1,0 +1,7 @@
+# Experiment 4: choose the augmentation op set using only some corruption categories, test on the others.
+_base_: common.yaml
+baseline: resnet18_base
+candidates: [resnet18_mix_jsd, resnet18_jsd_prime, resnet18_full, resnet18_jsd_nogeom]
+directions:
+  - {tune: [noise, blur], test: [weather, digital]}
+  - {tune: [weather, digital], test: [noise, blur]}

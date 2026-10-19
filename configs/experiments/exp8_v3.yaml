@@ -1,0 +1,41 @@
+# Experiment 8: the v3 approach (one mechanism per row), other architectures, self-supervised
+# pre-training, and distillation into a single fast network.
+#
+# Read it like experiment 7: decide between rows with "Val-C (sel.)" (validation corruptions, no test
+# image), not with the test columns. The v3 mechanisms were designed after looking at the pilot's
+# per-corruption results (fog, noise), so GTSRB-C is not a blind test of them.
+_base_: common.yaml
+labels:
+  resnet18_ln: ResNet-18 + local-global norm
+  resnet18_ln_apr: ResNet-18 + local-global norm + APR
+  resnet18_v3: ResNet-18 v3 (+ EMA, GPU speed-ups)
+  resnet18_v3_64: ResNet-18 v3, native 64 px
+  resnet18_v3_ssl: ResNet-18 v3, SimCLR pre-trained
+  convnext_atto_v3: ConvNeXt-Atto v3
+  efficientnet_b0_v3: EfficientNet-B0 v3
+  mobilenetv3_v3: MobileNetV3-L v3
+  deit_s_v3: DeiT-S v3
+  ensemble_v3: v3 view-expert ensemble
+  student_v3: v3 student (ResNet-18, distilled)
+  student_mbv3: v3 student (MobileNetV3, distilled)
+steps:
+  - {label: "ResNet-18 + instance norm (v2 branch)", run: resnet18_in}
+  - {label: "+ local-global contrast norm", run: resnet18_ln}
+  - {label: "+ amplitude-phase recombination", run: resnet18_ln_apr}
+  - {label: "+ EMA weights = ResNet-18 v3", run: resnet18_v3}
+  - {label: "ResNet-18 v3, native 64 px (fast)", run: resnet18_v3_64}
+  - {label: "ResNet-18 v3, SimCLR pre-trained", run: resnet18_v3_ssl}
+  - {label: "ConvNeXt-Atto v3", run: convnext_atto_v3}
+  - {label: "EfficientNet-B0 v3", run: efficientnet_b0_v3}
+  - {label: "MobileNetV3-L v3", run: mobilenetv3_v3}
+  - {label: "DeiT-S v3", run: deit_s_v3}
+  - {label: "v2 teacher: view experts (instance norm)", run: ensemble_views_in}
+  - {label: "v3 view-expert ensemble", run: ensemble_v3}
+  - {label: "v3 student: ResNet-18 distilled", run: student_v3}
+  - {label: "v3 student: MobileNetV3 distilled", run: student_mbv3}
+  - {label: "v3 student (ResNet-18) + temperature", run: student_v3, calibrate: true}
+datasets: [btsd]
+speed:
+  batch_size: 256              # throughput batch
+  n_images: 2048
+  repeats: 3

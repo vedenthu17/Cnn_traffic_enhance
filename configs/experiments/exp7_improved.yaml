@@ -1,0 +1,28 @@
+# Experiment 7: the v2 approach, one mechanism per row.
+#
+# Every step is evaluated on GTSRB-C and, when prepared, on the cross-dataset sets below.
+# "Val-C (sel.)" is the model-selection metric: accuracy on the select half of the validation split
+# under the four validation corruptions, none of which is a test corruption. Decide between rows
+# with that column, not with the test columns.
+_base_: common.yaml
+steps:
+  - {label: "ResNet-18 (proposed training)", run: resnet18_full}
+  - {label: "ResNet-18 + instance input norm", run: resnet18_in}
+  - {label: "DeiT-S (proposed training)", run: deit_s_full}
+  - {label: "DeiT-S + instance input norm", run: deit_s_in}
+  - {label: "v1 gated fusion", run: fusion_full}
+  - {label: "v1 average ensemble", run: ensemble_avg}
+  - {label: "v1 average + view experts", run: ensemble_views}
+  - {label: "Average + instance input norm", run: ensemble_avg_in}
+  - {label: "Average + instance norm + view experts", run: ensemble_views_in}
+  - {label: "v2: + stacked degradation-aware gate", run: fusion_v2}
+  - {label: "v2 + temperature scaling", run: fusion_v2, calibrate: true}
+datasets: [btsd]               # cross-dataset columns; a dataset that is not prepared is skipped
+
+# Second table: test-time BatchNorm at small batch sizes, with and without a source-statistics prior.
+adaptation_runs: [resnet18_base, resnet18_full, resnet18_in, fusion_v2]
+batch_sizes: [1, 16, 64]
+prior: 16                      # pseudo-samples of source statistics (Schneider et al. 2020)
+severities: [5]
+n_per_set: 1000                # as in experiment 6, so that shared evaluations are reused
+n_per_set_bs1: 250

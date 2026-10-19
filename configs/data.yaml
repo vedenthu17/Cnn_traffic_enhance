@@ -1,0 +1,30 @@
+# Data + corruption settings shared by every experiment (other configs set `_base_: data.yaml`).
+
+# Where raw/processed/corrupted data lives. Relative paths are resolved against the repo root.
+# The ROADLENS_DATA environment variable overrides this (use it on Colab: /content/roadlens_data).
+data_root: ./datasets
+
+data:
+  image_size: 64          # working resolution; images are resized FIRST, then corrupted
+  crop_roi: false         # false = full annotated image (GTSRB/BTSD ship with ~10% context border)
+  val_fraction: 0.1       # held out from train, split by physical sign track (no frame leakage)
+  split_seed: 0           # seed of the train/val split
+  num_classes: 43
+  # Debug subsets (0 = everything). test_subset = N evaluates the first N test images and expects
+  # corrupted sets generated with the same N (`make_gtsrb_c.py` reads it too).
+  train_subset: 0
+  val_subset: 0
+  test_subset: 0
+
+corruptions:
+  seed: 0                 # seed of GTSRB-C / validation-C generation
+  severities: [1, 2, 3, 4, 5]
+  # Test corruptions. NEVER used for training, augmentation design or model selection.
+  test:
+    noise:   [gaussian_noise, impulse_noise, shot_noise]
+    blur:    [motion_blur, zoom_blur, defocus_blur]
+    weather: [snow, fog, frost, brightness]
+    digital: [contrast, pixelate, elastic_transform, jpeg_compression]
+  # Held-out corruptions used only for validation-C (early stopping / model selection).
+  val: [speckle_noise, gaussian_blur, spatter, saturate]
+  val_severities: [1, 2, 3, 4, 5]

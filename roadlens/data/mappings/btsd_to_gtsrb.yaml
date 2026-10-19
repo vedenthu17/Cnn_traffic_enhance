@@ -1,0 +1,37 @@
+# BTSD (BelgiumTSC, 62 classes) -> GTSRB (43 classes).
+#
+# Built by looking at every BTSD class (scripts/check_mapping.py --dataset btsd) and keeping only
+# classes whose pictogram is the same sign as a GTSRB class. Deliberately NOT mapped:
+#   32  all speed limits pooled in one class (50, 70, ...): no single GTSRB class
+#   35  blue arrow, mixed directions (keep right / keep left / turn) in one class
+#   1   single speed hump            (GTSRB 22 is the double-bump "uneven road" = BTSD 0)
+#   6   double curve, first right    (GTSRB 21 is first left = BTSD 5)
+#   9   cattle                       (GTSRB 31 is a deer)
+#   14, 15  road narrows both sides / left   (GTSRB 24 is narrows on the right = BTSD 16)
+#   18  crossroads with priority from the right (X); GTSRB 11 is the arrow pictogram = BTSD 17
+# and everything with no GTSRB counterpart (parking, no stopping, cycle paths, limits by weight/size, ...).
+dataset: btsd
+verified: true   # every pair checked visually against GTSRB examples
+map:
+  0: 22    # uneven road                      -> Bumpy road
+  2: 23    # slippery road                    -> Slippery road
+  3: 19    # bend to the left                 -> Dangerous curve left
+  4: 20    # bend to the right                -> Dangerous curve right
+  5: 21    # double bend, first left          -> Double curve
+  7: 28    # children                         -> Children crossing
+  8: 29    # cyclists                         -> Bicycles crossing
+  10: 25   # road works                       -> Road work
+  11: 26   # traffic signals                  -> Traffic signals
+  13: 18   # other danger (!)                 -> General caution
+  16: 24   # road narrows on the right        -> Road narrows on the right
+  17: 11   # priority at next intersection    -> Right-of-way at next intersection
+  19: 13   # give way                         -> Yield
+  21: 14   # stop                             -> Stop
+  22: 17   # no entry                         -> No entry
+  25: 16   # no lorries                       -> No trucks
+  28: 15   # closed to all vehicles           -> No vehicles
+  31: 9    # no overtaking                    -> No passing
+  34: 35   # ahead only                       -> Ahead only
+  36: 36   # ahead or right                   -> Go straight or right
+  37: 40   # roundabout                       -> Roundabout mandatory
+  61: 12   # priority road                    -> Priority road

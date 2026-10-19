@@ -1,0 +1,13 @@
+# --profile pilot: real but rough results in roughly an hour on one GPU.
+# Full training set, ONE seed, schedules shortened to 40%, the first 2,000 test images.
+# Use it to preview trends before spending GPU time on the full three-seed experiments.
+# Outputs go to runs_pilot/ and results_pilot/.
+# Needs: python scripts/make_gtsrb_c.py --profile pilot   (and --dataset btsd --profile pilot)
+data:
+  test_subset: 2000
+train:
+  epoch_scale: 0.4           # epochs = max(2, round(0.4 * epochs of the run))
+seeds: [0]
+n_per_set: 500               # experiment 6
+n_per_set_bs1: 100
+fourier: {n_images: 200, stride: 2}

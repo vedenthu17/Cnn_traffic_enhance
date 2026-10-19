@@ -1,0 +1,12 @@
+# --profile pilot_4gb: the pilot profile for a GPU with about 4 GB of memory (e.g. a laptop RTX 3050).
+# Same as pilot.yaml, but with batch size 64 so that three JSD views of DeiT-S fit in memory.
+# Outputs go to runs_pilot_4gb/ and results_pilot_4gb/; it shares the 2,000-image GTSRB-C subset with pilot.
+data:
+  test_subset: 2000
+train:
+  epoch_scale: 0.4
+  batch_size: 64
+seeds: [0]
+n_per_set: 500
+n_per_set_bs1: 100
+fourier: {n_images: 200, stride: 2}

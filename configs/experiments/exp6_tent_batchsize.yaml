@@ -1,0 +1,10 @@
+# Experiment 6: test-time adaptation vs. test batch size.
+_base_: common.yaml
+runs: [smallcnn_base, resnet18_base, resnet18_full, fusion_full]   # models with BatchNorm layers
+methods: [none, bn, tent]      # source model / test-time BN statistics / TENT
+batch_sizes: [1, 16, 64, 200]
+severities: [5]                # GTSRB-C severities in the stream (each corruption is its own stream)
+n_per_set: 1000                # images per corruption stream (fixed random subset; 0 = all 12,630)
+n_per_set_bs1: 250             # shorter stream for batch size 1 (one optimisation step per image is slow,
+                               # and adaptation with single-image statistics fails long before 250 steps)
+lr: 1.0e-3                     # TENT: Adam, one step per batch

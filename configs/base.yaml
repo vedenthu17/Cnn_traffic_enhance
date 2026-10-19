@@ -1,0 +1,35 @@
+# Training defaults. Every file in configs/runs/ inherits from this (directly or through another run).
+_base_: data.yaml
+
+runs_root: ./runs            # checkpoints, logs, cached evaluations ($ROADLENS_RUNS overrides)
+results_root: ./results      # tables and figures
+
+model:
+  name: resnet18             # smallcnn | fusion | any timm model name
+  pretrained: true           # ImageNet weights from timm
+  input_size: 128            # the 64 px image is upsampled to this size on the GPU before the backbone
+  drop_path: 0.0
+
+train:
+  epochs: 15
+  batch_size: 128
+  lr: 5.0e-4
+  weight_decay: 0.05
+  warmup_epochs: 1
+  label_smoothing: 0.1
+  grad_clip: 1.0
+  patience: 4                # early stopping: epochs without a better validation-C accuracy
+  amp: true                  # mixed precision (GPU only)
+  eval_batch_size: 512
+
+augment:
+  # Baseline augmentation: mild colour jitter only. No horizontal flip (turn-left <-> turn-right).
+  color_jitter: {brightness: 0.2, contrast: 0.2, saturation: 0.2, hue: 0.02}
+  mode: none                 # none | mix (train on one AugMix view) | jsd (clean + 2 AugMix views, JSD loss)
+  ops: [augmix, prime]       # op names or sets (augmix, prime, geometric); see roadlens/augment/ops.py
+  exclude_ops: []
+  width: 3                   # chains per mixed image
+  depth: [1, 3]              # ops per chain, sampled uniformly
+  alpha: 1.0                 # Dirichlet / Beta concentration of the mixing weights
+  severity: 3                # op magnitude, 0-10 (AugMix scale)
+  jsd_weight: 12.0
